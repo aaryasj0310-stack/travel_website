@@ -1,0 +1,65 @@
+.section {
+    width: 100%;
+    padding: 6rem 1.5rem;
+    margin: 0 auto;
+}
+
+.section-wide {
+    max-width: var(--section-width);
+}
+
+.section-narrow {
+    max-width: var(--section-narrow-width);
+}
+
+.section-heading {
+    max-width: 42rem;
+    margin: 0 auto 4rem;
+    text-align: center;
+}
+
+.section-heading h2,
+.two-column h2 {
+    margin-bottom: 1.5rem;
+    font-size: clamp(2.25rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.section-heading p,
+.section-copy {
+    color: var(--text-muted);
+    font-size: 1.125rem;
+}
+
+.section-copy {
+    margin-bottom: 2rem;
+}
+
+.section-kicker {
+    margin-bottom: 1rem;
+    color: var(--highlight);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    gap: 4rem;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
+}
+
+.itinerary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+}

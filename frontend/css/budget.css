@@ -1,0 +1,299 @@
+/* Budget page styles — extends shared panel/form styles from trips.css */
+
+/* ── Trip Selector ─────────────────────────────────── */
+
+.budget-trip-selector {
+  max-width: 480px;
+  margin-bottom: 2rem;
+}
+
+.budget-trip-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-primary, #f0f0f0);
+  font-size: 0.95rem;
+}
+
+.budget-trip-selector select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary, #f0f0f0);
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  appearance: auto;
+}
+
+.budget-trip-selector select:focus {
+  outline: none;
+  border-color: var(--accent-primary, #00d4ff);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+}
+
+/* ── Allocations Fieldset ──────────────────────────── */
+
+.budget-allocations-fieldset {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.budget-allocations-fieldset legend {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-primary, #f0f0f0);
+  padding: 0 0.5rem;
+}
+
+.allocation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.allocation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.allocation-field label {
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+.allocation-field input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary, #f0f0f0);
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.allocation-field input:focus {
+  outline: none;
+  border-color: var(--accent-primary, #00d4ff);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.15);
+}
+
+/* ── Allocation Summary (live totals bar) ──────────── */
+
+.budget-allocation-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.budget-allocation-summary span:first-child {
+  color: var(--accent-primary, #00d4ff);
+}
+
+.budget-allocation-summary .over-budget {
+  color: #ff6b6b;
+}
+
+.budget-allocation-summary .under-budget {
+  color: #51cf66;
+}
+
+/* ── Budget Overview Panel ─────────────────────────── */
+
+.budget-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.budget-stat-card {
+  padding: 1.15rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.budget-stat-card .stat-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--text-secondary, #b0b0b0);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.budget-stat-card .stat-value {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--text-primary, #f0f0f0);
+}
+
+.budget-stat-card .stat-value.accent {
+  color: var(--accent-primary, #00d4ff);
+}
+
+.budget-stat-card .stat-value.success {
+  color: #51cf66;
+}
+
+.budget-stat-card .stat-value.danger {
+  color: #ff6b6b;
+}
+
+/* ── Category Breakdown ────────────────────────────── */
+
+.budget-categories-heading {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary, #f0f0f0);
+  margin-bottom: 1rem;
+}
+
+.budget-category-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.budget-category-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.budget-category-row .cat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.budget-category-row .cat-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary, #f0f0f0);
+}
+
+.budget-category-row .cat-amounts {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+.budget-bar {
+  position: relative;
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.budget-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 5px;
+  background: var(--accent-primary, #00d4ff);
+  transition: width 0.45s ease;
+  min-width: 0;
+}
+
+.budget-bar-fill.over {
+  background: #ff6b6b;
+}
+
+/* ── Budget List (bottom section) ──────────────────── */
+
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.budget-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: border-color 0.25s, transform 0.2s, background 0.25s;
+}
+
+.budget-card:hover {
+  border-color: rgba(0, 212, 255, 0.35);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+.budget-card__info h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-primary, #f0f0f0);
+  margin-bottom: 0.25rem;
+}
+
+.budget-card__info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+.budget-card__stats {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.budget-card__stats .stat-amount {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent-primary, #00d4ff);
+}
+
+.budget-card__stats .stat-spent {
+  font-size: 0.82rem;
+  color: var(--text-secondary, #b0b0b0);
+}
+
+/* ── Responsive ────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .allocation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .budget-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .budget-card__stats {
+    text-align: left;
+  }
+}

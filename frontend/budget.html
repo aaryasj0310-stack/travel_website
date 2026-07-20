@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage trip budgets with category allocations and track spending for your travel plans.">
+  <title>Budget | Voyage</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/trips.css">
+  <link rel="stylesheet" href="css/budget.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <script src="js/budget.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <nav class="site-nav-solid" aria-label="Main navigation">
+      <a href="index.html" class="nav-logo">
+        <i class="fas fa-compass" aria-hidden="true"></i>
+        <span>Voyage</span>
+      </a>
+      <ul class="nav-links" aria-label="Main sections">
+        <li><a href="index.html#features">Features</a></li>
+        <li><a href="trips.html">Trips</a></li>
+        <li><a href="budget.html" aria-current="page">Budget</a></li>
+        <li><a href="expenses.html">Expenses</a></li>
+        <li><a href="itinerary.html">Itinerary</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="trips-page" id="budget-management">
+    <section class="trips-shell" aria-labelledby="budget-page-heading">
+      <div class="trips-header">
+        <div>
+          <span class="section-kicker">Financial Planning</span>
+          <h1 id="budget-page-heading">Budget Management</h1>
+          <p class="section-description">Allocate funds across categories and track spending for each trip.</p>
+        </div>
+      </div>
+
+      <div class="budget-trip-selector">
+        <label for="trip-selector">Select Trip</label>
+        <select id="trip-selector">
+          <option value="">— Choose a trip —</option>
+        </select>
+      </div>
+
+      <div id="budget-alert" class="trip-alert" hidden></div>
+
+      <div class="trip-workspace" id="budget-workspace" hidden>
+        <section class="trip-panel" aria-labelledby="budget-form-heading">
+          <div class="panel-heading">
+            <h2 id="budget-form-heading">
+              <i class="fas fa-wallet" aria-hidden="true"></i>
+              <span id="budget-form-title">Create Budget</span>
+            </h2>
+          </div>
+
+          <form id="budget-form" novalidate>
+            <input type="hidden" id="budget-id" value="">
+
+            <div class="form-field">
+              <label for="total-amount">Total Budget (₹)</label>
+              <input type="number" id="total-amount" min="1" step="0.01" required
+                placeholder="e.g. 45000">
+            </div>
+
+            <fieldset class="budget-allocations-fieldset">
+              <legend>Category Allocations (₹)</legend>
+              <div id="allocation-fields" class="allocation-grid">
+                <!-- Dynamically populated from categories API -->
+              </div>
+            </fieldset>
+
+            <div class="budget-allocation-summary" id="allocation-summary">
+              <span id="allocation-total-label">Allocated: ₹0</span>
+              <span id="allocation-remaining-label">Unallocated: ₹0</span>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit" id="save-budget-button">
+                <i class="fas fa-save" aria-hidden="true"></i>
+                Create Budget
+              </button>
+              <button class="btn btn-outline" type="button" id="cancel-edit-button" hidden>
+                Cancel
+              </button>
+              <button class="btn btn-danger" type="button" id="delete-budget-button" hidden>
+                <i class="fas fa-trash" aria-hidden="true"></i>
+                Delete Budget
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="trip-panel" aria-labelledby="budget-overview-heading">
+          <div class="panel-heading">
+            <h2 id="budget-overview-heading">
+              <i class="fas fa-chart-pie" aria-hidden="true"></i>
+              Budget Overview
+            </h2>
+          </div>
+
+          <div id="budget-overview" class="empty-state">
+            <p>No budget set for this trip yet.</p>
+          </div>
+        </section>
+      </div>
+
+      <div id="budget-list-section">
+        <div class="panel-heading">
+          <h2>
+            <i class="fas fa-list" aria-hidden="true"></i>
+            All Trip Budgets
+          </h2>
+        </div>
+        <p id="budget-count" class="section-description">Loading budgets…</p>
+        <div id="budget-list" class="budget-list">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

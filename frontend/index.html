@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Voyage is a travel planning and budget management system for organizing itineraries, trip budgets, and expenses.">
+    <meta name="theme-color" content="#0f2027">
+    <meta property="og:title" content="Voyage — Travel Planning & Budget Management">
+    <meta property="og:description" content="Plan trips, build itineraries, allocate budgets, and track expenses in one travel planning system.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Voyage — Travel Planning & Budget Management</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" fetchpriority="high">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <script src="js/navbar.js" defer></script>
+    <script src="js/scroll.js" defer></script>
+    <script src="js/animations.js" defer></script>
+    <script src="js/landing.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <div class="bg-gradient-overlay" aria-hidden="true"></div>
+
+    <nav id="navbar" class="site-nav" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="Voyage home">
+            <i class="fas fa-paper-plane brand__icon" aria-hidden="true"></i>
+            <span class="brand__name">Voyage</span>
+        </a>
+
+        <ul class="nav-links" aria-label="Main sections">
+            <li><a href="#features">Features</a></li>
+            <li><a href="trips.html">Trips</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="itinerary.html">Itinerary</a></li>
+            <li><a href="#budget">Budget</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a class="nav-login" href="#dashboard">Login</a>
+            <a class="btn btn-primary" href="trips.html">Get Started</a>
+        </div>
+    </nav>
+
+    <header id="top" class="hero">
+        <div class="hero__media" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80" alt="" fetchpriority="high" decoding="async">
+            <div class="hero__shade"></div>
+        </div>
+
+        <div class="hero__content">
+            <p class="hero__eyebrow fade-up delay-200">Plan. Track. Explore.</p>
+            <h1 class="hero-title">
+                <span class="delay-400">Your</span>
+                <span class="delay-600">Journey,</span>
+                <br>
+                <span class="delay-800 hero-title__accent">Perfectly</span>
+                <span class="delay-1000">Budgeted.</span>
+            </h1>
+            <p class="hero__text fade-up delay-1200">
+                A unified workspace for your travels. Build day-by-day itineraries, allocate categorized budgets, and track every expense—all in one beautifully designed system.
+            </p>
+            <div class="hero__actions fade-up delay-1400">
+                <a class="btn btn-primary btn-large" href="trips.html">Start Planning</a>
+                <a class="btn btn-outline btn-large" href="#features">Explore Features</a>
+            </div>
+        </div>
+
+        <div class="scroll-cue" aria-hidden="true">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </header>
+
+    <main id="main-content">
+        <section class="section section-narrow reveal" aria-labelledby="problem-title">
+            <div class="section-heading">
+                <h2 id="problem-title">Travel planning shouldn't be scattered.</h2>
+                <p>
+                    Notes apps for ideas, spreadsheets for budgeting, mental math for expenses. Voyage brings everything into one cohesive, real-time environment.
+                </p>
+            </div>
+        </section>
+
+        <section id="features" class="section section-wide" aria-labelledby="features-title">
+            <h2 id="features-title" class="visually-hidden">Voyage features</h2>
+            <div class="feature-grid">
+                <article class="feature-card glass reveal">
+                    <div class="feature-card__icon" aria-hidden="true"><i class="fas fa-route"></i></div>
+                    <h3>Trip Management</h3>
+                    <p>Create, edit, and manage unlimited trips. Track status from Upcoming to Completed automatically.</p>
+                </article>
+
+                <article class="feature-card glass reveal reveal-delay-100">
+                    <div class="feature-card__icon" aria-hidden="true"><i class="fas fa-calendar-days"></i></div>
+                    <h3>Daily Itineraries</h3>
+                    <p>Build day-by-day schedules. Add activities, times, and locations so you never miss a moment.</p>
+                </article>
+
+                <article class="feature-card glass reveal reveal-delay-200">
+                    <div class="feature-card__icon" aria-hidden="true"><i class="fas fa-wallet"></i></div>
+                    <h3>Smart Budgeting</h3>
+                    <p>Allocate funds across 6 fixed categories. Visualize your spending limits before you fly.</p>
+                </article>
+
+                <article class="feature-card glass reveal reveal-delay-300">
+                    <div class="feature-card__icon" aria-hidden="true"><i class="fas fa-receipt"></i></div>
+                    <h3>Expense Tracking</h3>
+                    <p>Log expenses on the go. Watch your remaining budget recalculate instantly across categories.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section section-wide" aria-labelledby="dashboard-title">
+            <div class="two-column">
+                <div class="reveal">
+                    <p class="section-kicker">The Dashboard</p>
+                    <h2 id="dashboard-title">A clear view of your adventures.</h2>
+                    <p class="section-copy">
+                        Instantly see your upcoming trips, total planned budget, and expenses logged. The dashboard aggregates your data in real-time, providing quick statistics so you know exactly where you stand before and during your trip.
+                    </p>
+                    <ul class="check-list">
+                        <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Sorted upcoming trips</span></li>
+                        <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Budget summary widget</span></li>
+                        <li><i class="fas fa-check-circle" aria-hidden="true"></i><span>Quick statistics overview</span></li>
+                    </ul>
+                </div>
+
+                <div class="reveal float-card">
+                    <article class="dashboard-card glass" aria-label="Dashboard preview">
+                        <header class="dashboard-card__header">
+                            <div>
+                                <p>Welcome back,</p>
+                                <h3>Alex Rivers</h3>
+                            </div>
+                            <div class="avatar" aria-hidden="true">AR</div>
+                        </header>
+
+                        <div class="stat-grid">
+                            <div class="stat-card">
+                                <p>Total Trips</p>
+                                <strong>4</strong>
+                            </div>
+                            <div class="stat-card">
+                                <p>Total Budget</p>
+                                <strong>$4,250</strong>
+                            </div>
+                        </div>
+
+                        <h4 class="mockup-label">Upcoming Trip</h4>
+                        <section class="trip-card" aria-label="Upcoming trip preview">
+                            <div class="trip-card__header">
+                                <h3>Kyoto, Japan</h3>
+                                <span>Upcoming</span>
+                            </div>
+                            <p>Oct 15 - Oct 25, 2023</p>
+
+                            <div class="budget-row">
+                                <div class="budget-row__label">
+                                    <span>Total Spent</span>
+                                    <strong>$850 / $2,500</strong>
+                                </div>
+                                <div class="budget-bar">
+                                    <div class="budget-fill budget-fill-34"></div>
+                                </div>
+                            </div>
+                        </section>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="itinerary" class="section section-wide" aria-labelledby="itinerary-title">
+            <div class="section-heading reveal">
+                <p class="section-kicker">Itinerary Builder</p>
+                <h2 id="itinerary-title">Every day, perfectly planned.</h2>
+                <p>Organize your trip day-by-day. Add locations, times, and notes to keep your schedule seamless.</p>
+            </div>
+
+            <div class="itinerary-panel glass reveal">
+                <div class="itinerary-grid">
+                    <article class="timeline-day timeline-day-current">
+                        <p>DAY 01</p>
+                        <h3>Oct 15, 2023</h3>
+                        <div class="activity-list">
+                            <div class="activity-card">
+                                <time datetime="09:00">09:00 AM</time>
+                                <p>Arrival at KIX Airport</p>
+                                <span>Train to Kyoto Station</span>
+                            </div>
+                            <div class="activity-card">
+                                <time datetime="15:00">03:00 PM</time>
+                                <p>Check-in: Hyatt Regency</p>
+                            </div>
+                            <div class="activity-card">
+                                <time datetime="19:00">07:00 PM</time>
+                                <p>Dinner at Pontocho Alley</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="timeline-day timeline-day-next">
+                        <p>DAY 02</p>
+                        <h3>Oct 16, 2023</h3>
+                        <div class="activity-list">
+                            <div class="activity-card">
+                                <time datetime="08:00">08:00 AM</time>
+                                <p>Fushimi Inari Shrine</p>
+                                <span>Early hike to avoid crowds</span>
+                            </div>
+                            <div class="activity-card">
+                                <time datetime="13:00">01:00 PM</time>
+                                <p>Lunch: Nishiki Market</p>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="timeline-day timeline-day-future">
+                        <p>DAY 03</p>
+                        <h3>Oct 17, 2023</h3>
+                        <div class="activity-list">
+                            <div class="activity-card">
+                                <time datetime="10:00">10:00 AM</time>
+                                <p>Arashiyama Bamboo Grove</p>
+                            </div>
+                            <div class="activity-card">
+                                <time datetime="16:00">04:00 PM</time>
+                                <p>Tea Ceremony Experience</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="budget" class="section section-wide" aria-labelledby="budget-title">
+            <div class="two-column">
+                <article class="budget-card glass reveal" aria-label="Budget status preview">
+                    <header class="budget-card__header">
+                        <h3>Budget Status</h3>
+                        <span>65% Remaining</span>
+                    </header>
+
+                    <div class="budget-summary">
+                        <div class="budget-summary__label">
+                            <span>Total Trip Budget</span>
+                            <strong>$2,500.00</strong>
+                        </div>
+                        <div class="budget-bar budget-bar-large">
+                            <div class="budget-fill budget-fill-34"></div>
+                        </div>
+                        <div class="budget-summary__meta">
+                            <span>Spent: $850</span>
+                            <span>Remaining: $1,650</span>
+                        </div>
+                    </div>
+
+                    <div class="category-list">
+                        <div class="category-budget">
+                            <div>
+                                <span><i class="fas fa-plane-departure" aria-hidden="true"></i>Transportation</span>
+                                <strong>$400 / $600</strong>
+                            </div>
+                            <div class="budget-bar"><div class="budget-fill budget-fill-66"></div></div>
+                        </div>
+
+                        <div class="category-budget">
+                            <div>
+                                <span><i class="fas fa-hotel" aria-hidden="true"></i>Accommodation</span>
+                                <strong>$350 / $1000</strong>
+                            </div>
+                            <div class="budget-bar"><div class="budget-fill budget-fill-35"></div></div>
+                        </div>
+
+                        <div class="category-budget">
+                            <div>
+                                <span><i class="fas fa-utensils" aria-hidden="true"></i>Food</span>
+                                <strong>$100 / $500</strong>
+                            </div>
+                            <div class="budget-bar"><div class="budget-fill budget-fill-20"></div></div>
+                        </div>
+                    </div>
+                </article>
+
+                <div class="reveal">
+                    <p class="section-kicker">Smart Budgeting</p>
+                    <h2 id="budget-title">Never overspend again.</h2>
+                    <p class="section-copy">
+                        Allocate funds to six predefined categories: Transportation, Accommodation, Food, Activities, Shopping, and Miscellaneous. As you log expenses, the system automatically recalculates your remaining budget—overall and per category—so you always know what you can afford.
+                    </p>
+
+                    <div class="info-list">
+                        <article class="info-item">
+                            <i class="fas fa-bolt" aria-hidden="true"></i>
+                            <div>
+                                <h3>Real-time Recalculation</h3>
+                                <p>Budgets update instantly the moment an expense is added, edited, or deleted.</p>
+                            </div>
+                        </article>
+
+                        <article class="info-item">
+                            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                            <div>
+                                <h3>Validation & Security</h3>
+                                <p>Robust server-side checks ensure your data is protected and accurate.</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner reveal">
+            <h2>Ready to embark?</h2>
+            <p>Join Voyage today and take control of your travel plans.</p>
+            <a class="btn btn-primary btn-large" href="#dashboard">Create Free Account</a>
+
+            <div class="footer-bottom">
+                <p>&copy; 2023 Voyage Travel Planner. All rights reserved.</p>
+                <nav aria-label="Footer links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
