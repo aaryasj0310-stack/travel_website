@@ -1,0 +1,63 @@
+erDiagram
+    users ||--o{ trips : creates
+    trips ||--o{ itinerary_days : has
+    itinerary_days ||--o{ itinerary_activities : includes
+    trips ||--|| trip_budgets : has
+    trip_budgets ||--o{ budget_allocations : contains
+    budget_categories ||--o{ budget_allocations : defines
+    trips ||--o{ expenses : incurs
+    trip_budgets ||--o{ expenses : tracks
+    budget_categories ||--o{ expenses : categorized_as
+    budget_allocations ||--o{ expenses : deducts_from
+
+    users {
+        BIGINT id PK
+        VARCHAR name
+        VARCHAR email
+        VARCHAR password_hash
+    }
+    trips {
+        BIGINT id PK
+        BIGINT user_id FK
+        VARCHAR destination
+        DATE start_date
+        DATE end_date
+        ENUM status
+    }
+    itinerary_days {
+        BIGINT id PK
+        BIGINT trip_id FK
+        DATE day_date
+        INT day_number
+    }
+    itinerary_activities {
+        BIGINT id PK
+        BIGINT itinerary_day_id FK
+        TIME activity_time
+        VARCHAR title
+        VARCHAR location
+    }
+    budget_categories {
+        TINYINT id PK
+        VARCHAR name
+        VARCHAR slug
+    }
+    trip_budgets {
+        BIGINT id PK
+        BIGINT trip_id FK
+        DECIMAL total_amount
+    }
+    budget_allocations {
+        BIGINT id PK
+        BIGINT budget_id FK
+        TINYINT category_id FK
+        DECIMAL allocated_amount
+    }
+    expenses {
+        BIGINT id PK
+        BIGINT trip_id FK
+        BIGINT budget_id FK
+        TINYINT category_id FK
+        DECIMAL amount
+        DATE expense_date
+    }

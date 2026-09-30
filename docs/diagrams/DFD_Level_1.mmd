@@ -1,0 +1,35 @@
+graph TD
+    User([User])
+
+    P1((1.0 Manage Trips))
+    P2((2.0 Manage Itineraries))
+    P3((3.0 Manage Budgets))
+    P4((4.0 Manage Expenses))
+
+    D1[(D1: Trips DB)]
+    D2[(D2: Itineraries DB)]
+    D3[(D3: Budgets DB)]
+    D4[(D4: Expenses DB)]
+
+    User -- "Trip Details (destination, dates)" --> P1
+    P1 -- "Trip List, Status" --> User
+    P1 -- "Store/Update Trip" --> D1
+    D1 -- "Retrieve Trip" --> P1
+
+    User -- "Activity Details (time, location)" --> P2
+    P2 -- "Daily Schedule" --> User
+    P2 -- "Store Activity" --> D2
+    D2 -- "Retrieve Schedule" --> P2
+    P2 -. "Verify Trip Exists" .-> D1
+
+    User -- "Total Budget, Allocations" --> P3
+    P3 -- "Budget Overview" --> User
+    P3 -- "Store Budget" --> D3
+    D3 -- "Retrieve Budget" --> P3
+    P3 -. "Verify Trip Exists" .-> D1
+
+    User -- "Expense Data (amount, category)" --> P4
+    P4 -- "Expense Summary" --> User
+    P4 -- "Store Expense" --> D4
+    D4 -- "Retrieve Expense" --> P4
+    P4 -. "Verify Trip & Categories" .-> D3
