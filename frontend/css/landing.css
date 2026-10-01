@@ -25,7 +25,7 @@
 .photo-caption { color:var(--on-dark);font-size:.65rem;letter-spacing:.2em; } .sample-itinerary { padding:1.5rem;box-shadow:var(--shadow); }.sample-itinerary h3 { margin:1rem 0; font:400 1.4rem var(--font-serif); }
 .preview-moment { display:flex;gap:1rem;padding:1rem 0;border-top:1px solid var(--line);font-size:.7rem; }.preview-moment time { color:var(--accent); }.preview-moment p { color:var(--muted); }
 .budget-art { padding:3rem 2rem;background:var(--media-budget),linear-gradient(135deg,var(--accent-soft),var(--sage));background-size:cover;border-radius:var(--radius-large); }
-.sample-budget { box-shadow:var(--shadow);transform:rotate(2deg); }.sample-budget h3 { font:400 1.6rem var(--font-serif);margin:1rem 0; }
+.sample-budget { box-shadow:var(--shadow); }.sample-budget h3 { font:400 1.6rem var(--font-serif);margin:1rem 0; }
 .sample-money { font-size:3rem;letter-spacing:-.06em; }.sample-money>span { display:block;font-size:.75rem;letter-spacing:0;color:var(--muted); }
 .sample-split { display:flex;gap:2rem;margin:1.5rem 0; }.sample-split span { display:block;font-size:.7rem;color:var(--muted); }.sample-split strong { font-size:1.1rem;font-weight:500; }
 .expense-story h2 { font-size:clamp(2.5rem,4vw,3.7rem);margin-top:1rem; }.receipt-preview { background:var(--surface);padding:1.5rem;margin-top:2rem;border:1px solid var(--line);border-bottom:3px dashed var(--line); }
