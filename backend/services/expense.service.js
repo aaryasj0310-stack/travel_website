@@ -1,8 +1,9 @@
+const { paise, decimal } = require('../utils/money');
+const { ownedTrip } = require('./ownership.service');
 const expenseModel = require('../models/expense.model');
 const budgetModel = require('../models/budget.model');
 const { validate } = require('../utils/validator');
 const { isValidDateString } = require('../utils/date-time');
-const { APP } = require('../utils/constants');
 const { NotFoundError, ValidationError } = require('../utils/errors');
 
 const toPositiveInteger = (value, field) => {
@@ -16,19 +17,6 @@ const toPositiveInteger = (value, field) => {
   }
 
   return number;
-};
-
-const toAmount = (value, field) => {
-  const amount = Number(value);
-
-  if (!Number.isFinite(amount) || amount <= 0) {
-    throw new ValidationError(undefined, [{
-      field,
-      message: `${field} must be greater than zero.`
-    }]);
-  }
-
-  return amount;
 };
 
 const normalizeDescription = (value) => {
@@ -47,7 +35,7 @@ const normalizeDescription = (value) => {
 const normalizeExpensePayload = (payload = {}) => ({
   budgetId: payload.budgetId === undefined ? undefined : Number(payload.budgetId),
   categoryId: payload.categoryId === undefined ? undefined : Number(payload.categoryId),
-  amount: payload.amount === undefined ? undefined : Number(payload.amount),
+  amount: payload.amount === undefined ? undefined : decimal(paise(payload.amount)),
   expenseDate: payload.expenseDate,
   description: normalizeDescription(payload.description)
 });
@@ -73,7 +61,7 @@ const validateExpensePayload = (expense) => {
     amount: {
       required: true,
       custom: (value) => (
-        Number.isFinite(value) && value > 0
+        paise(value) > 0
           ? null
           : 'amount must be greater than zero.'
       )
@@ -105,7 +93,7 @@ const validateUpdatePayload = (expense) => {
     amount: {
       required: true,
       custom: (value) => (
-        Number.isFinite(value) && value > 0
+        paise(value) > 0
           ? null
           : 'amount must be greater than zero.'
       )
@@ -124,13 +112,14 @@ const validateUpdatePayload = (expense) => {
   });
 };
 
-const getBudgetForExpense = async (budgetId) => {
+const getBudgetForExpense = async (budgetId, userId) => {
   const budget = await budgetModel.findById(budgetId);
 
   if (!budget) {
     throw new NotFoundError('Budget not found.');
   }
 
+  await ownedTrip(budget.tripId, userId);
   return budget;
 };
 
@@ -145,23 +134,11 @@ const validateCategoryForBudget = async (budgetId, categoryId) => {
   }
 };
 
-const validateBudgetCapacity = async (budgetId, amount, excludeExpenseId = null) => {
-  const budget = await getBudgetForExpense(budgetId);
-  const currentSpent = await expenseModel.sumByBudgetId(budgetId, excludeExpenseId);
-  const projectedTotal = currentSpent + amount;
 
-  if (projectedTotal > budget.totalAmount) {
-    throw new ValidationError('This expense would exceed the total trip budget.', [{
-      field: 'amount',
-      message: `Adding this expense would exceed the total budget of ${budget.totalAmount}. Remaining: ${Math.max(budget.totalAmount - currentSpent, 0).toFixed(2)}.`
-    }]);
-  }
-};
-
-const buildBudgetSummary = async (budgetId) => {
-  const budget = await getBudgetForExpense(budgetId);
+const buildBudgetSummary = async (budgetId, userId) => {
+  const budget = await getBudgetForExpense(budgetId, userId);
   const totalSpent = await expenseModel.sumByBudgetId(budgetId);
-  const remainingBudget = budget.totalAmount - totalSpent;
+  const remainingBudget = decimal(paise(budget.totalAmount) - paise(totalSpent));
 
   return {
     budgetId: budget.id,
@@ -177,32 +154,31 @@ const getAllExpenses = async (filters = {}) => {
 
   if (filters.budgetId !== undefined) {
     queryFilters.budgetId = toPositiveInteger(filters.budgetId, 'budgetId');
-    await getBudgetForExpense(queryFilters.budgetId);
+    await getBudgetForExpense(queryFilters.budgetId, filters.userId);
   }
 
   if (filters.tripId !== undefined) {
     queryFilters.tripId = toPositiveInteger(filters.tripId, 'tripId');
+    await ownedTrip(queryFilters.tripId, filters.userId);
   }
 
   if (filters.categoryId !== undefined) {
     queryFilters.categoryId = toPositiveInteger(filters.categoryId, 'categoryId');
   }
 
-  queryFilters.userId = filters.userId === undefined
-    ? APP.DEFAULT_USER_ID
-    : toPositiveInteger(filters.userId, 'userId');
+  queryFilters.userId = toPositiveInteger(filters.userId, 'userId');
 
   const expenses = await expenseModel.findAll(queryFilters);
   const response = { expenses };
 
   if (queryFilters.budgetId !== undefined) {
-    response.summary = await buildBudgetSummary(queryFilters.budgetId);
+    response.summary = await buildBudgetSummary(queryFilters.budgetId, filters.userId);
   }
 
   return response;
 };
 
-const getExpenseById = async (id) => {
+const getExpenseById = async (id, userId) => {
   const expenseId = toPositiveInteger(id, 'id');
   const expense = await expenseModel.findById(expenseId);
 
@@ -210,18 +186,17 @@ const getExpenseById = async (id) => {
     throw new NotFoundError('Expense not found.');
   }
 
-  const summary = await buildBudgetSummary(expense.budgetId);
+  const summary = await buildBudgetSummary(expense.budgetId, userId);
 
   return { expense, summary };
 };
 
-const createExpense = async (payload) => {
+const createExpense = async (payload, userId) => {
   const expense = normalizeExpensePayload(payload);
   validateExpensePayload(expense);
 
-  const budget = await getBudgetForExpense(expense.budgetId);
+  const budget = await getBudgetForExpense(expense.budgetId, userId);
   await validateCategoryForBudget(expense.budgetId, expense.categoryId);
-  await validateBudgetCapacity(expense.budgetId, expense.amount);
 
   const createdExpense = await expenseModel.create({
     tripId: budget.tripId,
@@ -232,44 +207,45 @@ const createExpense = async (payload) => {
     description: expense.description
   });
 
-  const summary = await buildBudgetSummary(expense.budgetId);
+  const summary = await buildBudgetSummary(expense.budgetId, userId);
 
   return { expense: createdExpense, summary };
 };
 
-const updateExpense = async (id, payload) => {
+const updateExpense = async (id, payload, userId) => {
   const expenseId = toPositiveInteger(id, 'id');
   const existingExpense = await expenseModel.findById(expenseId);
 
   if (!existingExpense) {
     throw new NotFoundError('Expense not found.');
   }
+  await ownedTrip(existingExpense.tripId, userId);
 
   const expense = normalizeExpensePayload(payload);
   validateUpdatePayload(expense);
 
   await validateCategoryForBudget(existingExpense.budgetId, expense.categoryId);
-  await validateBudgetCapacity(existingExpense.budgetId, expense.amount, expenseId);
 
   await expenseModel.update(expenseId, expense);
 
   const updatedExpense = await expenseModel.findById(expenseId);
-  const summary = await buildBudgetSummary(existingExpense.budgetId);
+  const summary = await buildBudgetSummary(existingExpense.budgetId, userId);
 
   return { expense: updatedExpense, summary };
 };
 
-const deleteExpense = async (id) => {
+const deleteExpense = async (id, userId) => {
   const expenseId = toPositiveInteger(id, 'id');
   const existingExpense = await expenseModel.findById(expenseId);
 
   if (!existingExpense) {
     throw new NotFoundError('Expense not found.');
   }
+  await ownedTrip(existingExpense.tripId, userId);
 
   await expenseModel.remove(expenseId);
 
-  const summary = await buildBudgetSummary(existingExpense.budgetId);
+  const summary = await buildBudgetSummary(existingExpense.budgetId, userId);
 
   return { summary };
 };

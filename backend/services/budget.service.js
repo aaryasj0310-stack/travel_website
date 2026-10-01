@@ -1,8 +1,9 @@
+const { paise, decimal, sum } = require('../utils/money');
+const { ownedTrip } = require('./ownership.service');
 const budgetModel = require('../models/budget.model');
 const budgetCategoryModel = require('../models/budget-category.model');
 const tripModel = require('../models/trip.model');
 const { NotFoundError, ValidationError } = require('../utils/errors');
-const { APP } = require('../utils/constants');
 
 const toPositiveInteger = (value, field) => {
   const number = Number(value);
@@ -17,71 +18,34 @@ const toPositiveInteger = (value, field) => {
   return number;
 };
 
-const validateTripExists = async (tripId) => {
-  const trip = await tripModel.findById(tripId);
-
-  if (!trip) {
-    throw new NotFoundError('Trip not found.');
-  }
-
-  return trip;
-};
+const validateTripExists = ownedTrip;
 
 const normalizeBudgetPayload = (payload, categories) => {
-  const totalAmount = Number(payload.totalAmount);
-
-  const allocationMap = {};
-
-  if (Array.isArray(payload.allocations)) {
-    payload.allocations.forEach((a) => {
-      allocationMap[Number(a.categoryId)] = Number(a.allocatedAmount) || 0;
-    });
+  if (categories.length !== 6) throw new ValidationError('Budget categories are not configured. Run database/categories.sql before creating budgets.');
+  const totalAmount = decimal(paise(payload.totalAmount, 'totalAmount'));
+  if (!Array.isArray(payload.allocations)) throw new ValidationError('Category allocations are required.');
+  const allocationMap = new Map();
+  for (const item of payload.allocations) {
+    const id = Number(item.categoryId);
+    if (!categories.some(c => Number(c.id) === id) || allocationMap.has(id)) throw new ValidationError('Unknown or repeated budget category.');
+    allocationMap.set(id, decimal(paise(item.allocatedAmount, 'allocatedAmount')));
   }
-
-  const allocations = categories.map((category) => ({
-    categoryId: category.id,
-    allocatedAmount: allocationMap[category.id] || 0
-  }));
-
+  const allocations = categories.map(category => ({ categoryId: category.id, allocatedAmount: allocationMap.get(Number(category.id)) || '0.00' }));
   return { totalAmount, allocations };
 };
-
 const validateBudgetPayload = (totalAmount, allocations) => {
-  const errors = [];
-
-  if (!Number.isFinite(totalAmount) || totalAmount <= 0) {
-    errors.push({ field: 'totalAmount', message: 'totalAmount must be greater than zero.' });
-  }
-
-  let sumAllocations = 0;
-  allocations.forEach((allocation) => {
-    if (!Number.isFinite(allocation.allocatedAmount) || allocation.allocatedAmount < 0) {
-      errors.push({
-        field: `allocation_${allocation.categoryId}`,
-        message: 'Category allocation must be zero or greater.'
-      });
-    } else {
-      sumAllocations += allocation.allocatedAmount;
-    }
-  });
-
-  if (sumAllocations > totalAmount) {
-    errors.push({ field: 'allocations', message: 'Total allocations cannot exceed the total budget amount.' });
-  }
-
-  if (errors.length > 0) {
-    throw new ValidationError(undefined, errors);
-  }
+  if (paise(totalAmount) <= 0) throw new ValidationError('Total budget must be greater than zero.');
+  if (sum(allocations.map(a => a.allocatedAmount)) > paise(totalAmount)) throw new ValidationError('Total allocations cannot exceed the total budget.');
 };
 
 const getCategories = async () => {
   return budgetCategoryModel.findAllActive();
 };
 
-const createBudget = async (tripId, payload) => {
+const createBudget = async (tripId, payload, userId) => {
   const id = toPositiveInteger(tripId, 'tripId');
 
-  await validateTripExists(id);
+  await validateTripExists(id, userId);
 
   const exists = await budgetModel.existsForTrip(id);
 
@@ -102,10 +66,10 @@ const createBudget = async (tripId, payload) => {
   return budgetModel.findByTripId(id);
 };
 
-const getBudgetByTripId = async (tripId) => {
+const getBudgetByTripId = async (tripId, userId) => {
   const id = toPositiveInteger(tripId, 'tripId');
 
-  await validateTripExists(id);
+  await validateTripExists(id, userId);
 
   const budget = await budgetModel.findByTripId(id);
 
@@ -116,10 +80,10 @@ const getBudgetByTripId = async (tripId) => {
   return budget;
 };
 
-const updateBudget = async (tripId, payload) => {
+const updateBudget = async (tripId, payload, userId) => {
   const id = toPositiveInteger(tripId, 'tripId');
 
-  await validateTripExists(id);
+  await validateTripExists(id, userId);
 
   const existingBudget = await budgetModel.findByTripId(id);
 
@@ -137,10 +101,10 @@ const updateBudget = async (tripId, payload) => {
   return budgetModel.findByTripId(id);
 };
 
-const deleteBudget = async (tripId) => {
+const deleteBudget = async (tripId, userId) => {
   const id = toPositiveInteger(tripId, 'tripId');
 
-  await validateTripExists(id);
+  await validateTripExists(id, userId);
 
   const exists = await budgetModel.existsForTrip(id);
 
@@ -152,9 +116,7 @@ const deleteBudget = async (tripId) => {
 };
 
 const getAllBudgets = async (filters = {}) => {
-  const userId = filters.userId === undefined
-    ? APP.DEFAULT_USER_ID
-    : toPositiveInteger(filters.userId, 'userId');
+  const userId = toPositiveInteger(filters.userId, 'userId');
 
   return budgetModel.findAllByUserId(userId);
 };

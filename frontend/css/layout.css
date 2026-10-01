@@ -1,65 +1,11 @@
-.section {
-    width: 100%;
-    padding: 6rem 1.5rem;
-    margin: 0 auto;
-}
-
-.section-wide {
-    max-width: var(--section-width);
-}
-
-.section-narrow {
-    max-width: var(--section-narrow-width);
-}
-
-.section-heading {
-    max-width: 42rem;
-    margin: 0 auto 4rem;
-    text-align: center;
-}
-
-.section-heading h2,
-.two-column h2 {
-    margin-bottom: 1.5rem;
-    font-size: clamp(2.25rem, 5vw, 3rem);
-    font-weight: 700;
-    line-height: 1.1;
-}
-
-.section-heading p,
-.section-copy {
-    color: var(--text-muted);
-    font-size: 1.125rem;
-}
-
-.section-copy {
-    margin-bottom: 2rem;
-}
-
-.section-kicker {
-    margin-bottom: 1rem;
-    color: var(--highlight);
-    font-size: 0.875rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-}
-
-.two-column {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: center;
-    gap: 4rem;
-}
-
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 2rem;
-}
-
-.itinerary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2rem;
-}
+.container { width: min(var(--content-width), calc(100% - 4rem)); margin-inline:auto; }
+.app-main { padding-block: 2.5rem 5rem; min-height: 80vh; }
+.page-heading { display:flex; justify-content:space-between; align-items:center; gap:1.5rem; margin:1rem 0 2rem; }
+.page-heading p { margin-top:.75rem; color:var(--muted); max-width:44rem; }
+.eyebrow { font-size:.7rem; letter-spacing:.19em; text-transform:uppercase; font-weight:600; color:var(--accent); }
+.stack { display:grid; gap:1.5rem; } .two-column { display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:start; }
+.workspace { display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.47fr);gap:2rem;align-items:start; }
+.section { padding-block:5rem; } .section-header { display:flex;justify-content:space-between;align-items:end;gap:1rem;margin-bottom:1.5rem; }
+.section-header p { color:var(--muted); } .section-header h2 { font-size:1.8rem; }
+.form-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem; } .form-grid .field { margin:0; }
+.actions { display:flex;flex-wrap:wrap;align-items:center;gap:.6rem; } .spaced { margin-top:1.5rem; }

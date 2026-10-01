@@ -1,0 +1,23 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { financials, statusFor, daysBetween } = require('../backend/services/journey.service');
+test('journey metrics distinguish missing budget, before, during and after travel', () => {
+  const trip = { startDate: '2026-10-01', endDate: '2026-10-03', numTravelers: 2 };
+  const budget = { totalAmount: '100.00', allocations: [{ allocatedAmount: '80.00', spentAmount: '90.01' }, { allocatedAmount: '0.00', spentAmount: '0.00' }] };
+  assert.equal(financials(null, trip, '2026-09-30'), null);
+  const before = financials(budget, trip, '2026-09-30');
+  assert.equal(before.remaining, '9.99');
+  assert.equal(before.unallocated, '20.00');
+  assert.equal(before.perTraveler, '50.00');
+  assert.equal(before.remainingPerDay, '3.33');
+  assert.equal(before.recordedPerElapsedDay, null);
+  assert.equal(before.categories[0].remaining, '-10.01');
+  assert.equal(before.categories[0].health, 'over');
+  assert.equal(before.largestCategory.spentAmount, '90.01');
+  assert.equal(before.categories[1].consumedPercent, null);
+  assert.equal(financials(budget, trip, '2026-10-02').remainingDays, 2);
+  assert.equal(financials(budget, trip, '2026-10-04').remainingPerDay, null);
+  assert.equal(statusFor(trip, '2026-10-01'), 'ongoing');
+  assert.equal(statusFor(trip, '2026-10-04'), 'completed');
+  assert.equal(daysBetween('2028-02-28', '2028-03-01'), 2);
+});

@@ -431,3 +431,17 @@ Before implementing a feature:
 4. Validate accessibility, security, and maintainability.
 5. Keep the UI consistent unless a redesign is explicitly approved.
 
+## 17. Voyage trip-centered implementation update (2026-09-30)
+
+The explicit product redesign preserves the architecture and stack above. No dependency was added. Existing normalized category/allocation tables remain authoritative over the older PRD database sketch.
+
+- Authentication is `/api/v1/auth/{csrf,register,login,logout,me,profile,password}`. Session IDs use HTTP-only, SameSite=Lax cookies and Secure in production. Registration/login/password change regenerate the session. CSRF tokens are returned to the browser and held only in memory; every mutation validates `X-CSRF-Token`.
+- All business resources require a session. Controllers pass only `req.session.userId` to services. Services verify the owning trip, including expense budget filters and itinerary IDs; another user's resource returns 404. Request `userId` never controls ownership.
+- The current Express MemoryStore and bounded-duration per-process authentication limiter are local-demonstration choices. Durable storage is required before multi-process or production deployment. Password changes rotate the current session; they do not revoke other existing sessions.
+- Monetary API values are decimal strings. Services validate precision and use integer paise for arithmetic; MySQL continues to store DECIMAL. Negative derived remaining balances are supported. Overspending is recorded and flagged, not blocked.
+- `GET /api/v1/dashboard?tripId=...` aggregates the selected owned journey. Without a selection it prefers an ongoing trip, then the nearest upcoming trip, then the latest past trip. It reuses existing models; SQL remains in models.
+- Calendar status uses Asia/Kolkata. Duration is inclusive. Elapsed calendar days include today once travel starts; remaining days also include today. Per-day values are rounded down to a paise. Recorded spending pace includes advance expenses and is labelled as a simple calculation, never a forecast.
+- Empty itinerary days are derived from the trip dates. Activities continue to persist their containing day. The itinerary shows 14 days at a time with previous/next navigation for long journeys. Ordering is date, time, sequence, ID; sequence only breaks time ties.
+- Shared browser code is one `Voyage` namespace for fetch, formatting, escaping, session startup and contextual navigation. Pages are normal HTML documents; trip context is in the URL. The browser never stores passwords or session tokens in web storage.
+- Design tokens are centralized in variables.css. Semantic native progress bars communicate category consumption, with written near/over-allocation states. Native dialogs provide activity/trip editing; focus indicators and reduced-motion CSS apply throughout.
+- Five optional photographic slots use CSS variables defaulting to `none`, with existing gradients behind them. The visual brief documents later asset integration; no images or new file extensions are added by this work.

@@ -1,3 +1,1 @@
-(function () {
-    document.documentElement.dataset.page = "landing";
-})();
+(() => { /* The public story is usable without animation or API data. */ })();

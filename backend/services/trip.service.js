@@ -1,7 +1,8 @@
+const { ownedTrip } = require('./ownership.service');
 const tripModel = require('../models/trip.model');
 const { validate } = require('../utils/validator');
-const { isValidDateString } = require('../utils/date-time');
-const { APP, TRIP_STATUS } = require('../utils/constants');
+const { isValidDateString, tripStatus } = require('../utils/date-time');
+const { TRIP_STATUS } = require('../utils/constants');
 const { NotFoundError, ValidationError } = require('../utils/errors');
 
 const allowedStatuses = Object.values(TRIP_STATUS);
@@ -19,8 +20,8 @@ const toPositiveInteger = (value, field) => {
   return number;
 };
 
-const normalizeTripPayload = (payload = {}, fallbackUserId = APP.DEFAULT_USER_ID) => ({
-  userId: payload.userId === undefined ? fallbackUserId : Number(payload.userId),
+const normalizeTripPayload = (payload = {}, fallbackUserId) => ({
+  userId: fallbackUserId,
   destination: typeof payload.destination === 'string' ? payload.destination.trim() : payload.destination,
   startDate: payload.startDate,
   endDate: payload.endDate,
@@ -28,7 +29,7 @@ const normalizeTripPayload = (payload = {}, fallbackUserId = APP.DEFAULT_USER_ID
     ? payload.description.trim()
     : null,
   numTravelers: payload.numTravelers === undefined ? 1 : Number(payload.numTravelers),
-  status: payload.status || TRIP_STATUS.UPCOMING
+  status: tripStatus(payload)
 });
 
 const validateTripPayload = (trip) => {
@@ -36,7 +37,7 @@ const validateTripPayload = (trip) => {
     userId: {
       required: true,
       custom: (value) => (
-        Number.isInteger(value) && value >= 1
+        Number.isSafeInteger(value) && value >= 1
           ? null
           : 'userId must be a positive integer.'
       )
@@ -71,6 +72,7 @@ const validateTripPayload = (trip) => {
     },
     numTravelers: {
       required: true,
+      max: 10000,
       custom: (value) => (
         Number.isInteger(value) && value >= 1
           ? null
@@ -85,45 +87,43 @@ const validateTripPayload = (trip) => {
 };
 
 const getAllTrips = async (filters = {}) => {
-  const userId = filters.userId === undefined
-    ? APP.DEFAULT_USER_ID
-    : toPositiveInteger(filters.userId, 'userId');
+  const userId = toPositiveInteger(filters.userId, 'userId');
 
-  return tripModel.findAllByUserId(userId);
+  return (await tripModel.findAllByUserId(userId)).map(trip => ({ ...trip, status: tripStatus(trip) }));
 };
 
-const getTripById = async (id) => {
+const getTripById = async (id, userId) => {
   const tripId = toPositiveInteger(id, 'id');
-  const trip = await tripModel.findById(tripId);
+  const trip = await ownedTrip(tripId, userId);
 
   if (!trip) {
     throw new NotFoundError('Trip not found.');
   }
 
-  return trip;
+  return { ...trip, status: tripStatus(trip) };
 };
 
-const createTrip = async (payload) => {
-  const trip = normalizeTripPayload(payload);
+const createTrip = async (payload, userId) => {
+  const trip = normalizeTripPayload(payload, toPositiveInteger(userId, 'userId'));
   validateTripPayload(trip);
 
   return tripModel.create(trip);
 };
 
-const updateTrip = async (id, payload) => {
+const updateTrip = async (id, payload, userId) => {
   const tripId = toPositiveInteger(id, 'id');
-  const existingTrip = await getTripById(tripId);
+  const existingTrip = await getTripById(tripId, userId);
 
   const trip = normalizeTripPayload(payload, existingTrip.userId);
   validateTripPayload(trip);
 
   await tripModel.update(tripId, trip);
-  return getTripById(tripId);
+  return getTripById(tripId, userId);
 };
 
-const deleteTrip = async (id) => {
+const deleteTrip = async (id, userId) => {
   const tripId = toPositiveInteger(id, 'id');
-  await getTripById(tripId);
+  await getTripById(tripId, userId);
   await tripModel.remove(tripId);
 };
 

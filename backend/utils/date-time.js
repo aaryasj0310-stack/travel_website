@@ -7,6 +7,7 @@ const isValidDateString = (value) => {
   if (!datePattern.test(value)) {
     return false;
   }
+  if (Number(value.slice(0, 4)) < 1000) return false;
 
   const date = new Date(`${value}T00:00:00.000Z`);
   return !Number.isNaN(date.getTime()) && date.toISOString().startsWith(value);
@@ -22,5 +23,7 @@ const isValidTimeString = (value) => {
 
 module.exports = {
   isValidDateString,
-  isValidTimeString
+  isValidTimeString,
+  todayInIndia: () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()),
+  tripStatus: (trip, today = module.exports.todayInIndia()) => today < trip.startDate ? 'upcoming' : today > trip.endDate ? 'completed' : 'ongoing'
 };

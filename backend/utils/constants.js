@@ -24,7 +24,6 @@ const MESSAGES = {
 
 const APP = {
   API_PREFIX: '/api/v1',
-  DEFAULT_USER_ID: 1,
   DEFAULT_PAGE: 1,
   DEFAULT_PAGE_SIZE: 10,
   MAX_PAGE_SIZE: 100

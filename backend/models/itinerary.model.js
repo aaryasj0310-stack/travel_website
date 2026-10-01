@@ -44,7 +44,7 @@ const findAllByTripId = async (tripId) => {
      FROM itinerary_activities a
      JOIN itinerary_days d ON d.id = a.itinerary_day_id
      WHERE d.trip_id = ?
-     ORDER BY d.day_date ASC, a.sequence_order ASC, a.activity_time ASC, a.id ASC`,
+     ORDER BY d.day_date ASC, a.activity_time ASC, a.sequence_order ASC, a.id ASC`,
     [tripId]
   );
   return rows.map(mapActivity);

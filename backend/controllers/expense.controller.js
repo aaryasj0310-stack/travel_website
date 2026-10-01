@@ -7,7 +7,7 @@ const getExpenses = async (req, res) => {
     budgetId: req.query.budgetId,
     tripId: req.query.tripId,
     categoryId: req.query.categoryId,
-    userId: req.query.userId
+    userId: req.session.userId
   });
 
   sendSuccess(res, {
@@ -17,7 +17,7 @@ const getExpenses = async (req, res) => {
 };
 
 const getExpense = async (req, res) => {
-  const result = await expenseService.getExpenseById(req.params.id);
+  const result = await expenseService.getExpenseById(req.params.id, req.session.userId);
 
   sendSuccess(res, {
     message: 'Expense retrieved successfully.',
@@ -26,7 +26,7 @@ const getExpense = async (req, res) => {
 };
 
 const createExpense = async (req, res) => {
-  const result = await expenseService.createExpense(req.body);
+  const result = await expenseService.createExpense(req.body, req.session.userId);
 
   sendSuccess(res, {
     statusCode: HTTP_STATUS.CREATED,
@@ -36,7 +36,7 @@ const createExpense = async (req, res) => {
 };
 
 const updateExpense = async (req, res) => {
-  const result = await expenseService.updateExpense(req.params.id, req.body);
+  const result = await expenseService.updateExpense(req.params.id, req.body, req.session.userId);
 
   sendSuccess(res, {
     message: 'Expense updated successfully.',
@@ -45,7 +45,7 @@ const updateExpense = async (req, res) => {
 };
 
 const deleteExpense = async (req, res) => {
-  const result = await expenseService.deleteExpense(req.params.id);
+  const result = await expenseService.deleteExpense(req.params.id, req.session.userId);
 
   sendSuccess(res, {
     message: 'Expense deleted successfully.',

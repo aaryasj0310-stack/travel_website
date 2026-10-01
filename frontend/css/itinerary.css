@@ -1,84 +1,9 @@
-/* Itinerary page styles — extends shared panel/form styles */
-
-.itinerary-list-panel {
-  margin-top: 1.5rem;
-}
-
-.itinerary-list-header {
-  align-items: flex-end;
-}
-
-.itinerary-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.itinerary-day-group {
-  margin-bottom: 2rem;
-}
-
-.itinerary-day-header {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--accent-primary, #00d4ff);
-}
-
-.itinerary-card-row {
-  padding: 1.15rem 1.25rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.04);
-  margin-bottom: 1rem;
-}
-
-.itinerary-card-row__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 0.5rem;
-}
-
-.itinerary-card-row__header h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-}
-
-.itinerary-card-row__header p {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.itinerary-time {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--accent-secondary, #f8a145);
-  white-space: nowrap;
-}
-
-.itinerary-meta {
-  color: var(--text-muted);
-  font-size: 0.875rem;
-  margin-bottom: 0.75rem;
-}
-
-.itinerary-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-@media (max-width: 768px) {
-  .itinerary-list-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .itinerary-card-row__header {
-    flex-direction: column;
-  }
-}
+.day-nav { display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0 2rem; }
+.day-nav a { min-height:44px;padding:.6rem .9rem;border:1px solid var(--line);border-radius:var(--radius);font-size:.8rem; }
+.day-nav a.today { background:var(--forest);color:var(--on-dark); }
+.timeline-day { scroll-margin-top:1rem;margin-bottom:2.5rem; } .day-heading { display:flex;gap:1rem;align-items:center;border-bottom:1px solid var(--line);padding-bottom:1rem;margin-bottom:1rem; }
+.day-number { color:var(--accent);font:400 2.4rem var(--font-serif); } .day-heading h2 { font:500 1.1rem var(--font-sans); } .day-heading p { font-size:.8rem;color:var(--muted); }
+.timeline-activity { display:grid;grid-template-columns:90px minmax(0,1fr);gap:1rem;padding:1.2rem 0; }
+.timeline-time { font-size:.85rem;font-weight:600;color:var(--forest); } .timeline-content { position:relative;padding-left:1.5rem;border-left:1px solid var(--line); }
+.timeline-content::before { content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--accent);left:-4px;top:.5rem; }
+.timeline-content p { color:var(--muted);font-size:.85rem;margin:.3rem 0 .7rem; } .timeline-content .actions { margin-top:.8rem; }

@@ -1,3 +1,4 @@
+const { ownedTrip } = require('./ownership.service');
 const itineraryModel = require('../models/itinerary.model');
 const tripModel = require('../models/trip.model');
 const { validate } = require('../utils/validator');
@@ -35,6 +36,7 @@ const normalizePayload = (payload = {}) => ({
 });
 
 const validatePayload = (activity) => {
+  if (activity.endTime && activity.endTime < activity.startTime) throw new ValidationError('End time must be on or after start time.');
   validate(activity, {
     tripId: {
       required: true,
@@ -57,8 +59,8 @@ const validatePayload = (activity) => {
           return isValidTime(value) ? null : 'endTime must be a valid time (HH:MM).';
       }
     },
-    title: { required: true, type: 'string', maxLength: 100 },
-    location: { required: true, type: 'string', maxLength: 100 },
+    title: { required: true, type: 'string', minLength: 2, maxLength: 100 },
+    location: { required: true, type: 'string', minLength: 2, maxLength: 100 },
     description: { type: 'string', maxLength: 300 },
     sequenceOrder: {
       custom: (value) => (Number.isInteger(value) && value >= 0 ? null : 'sequenceOrder must be a positive integer or zero.')
@@ -67,6 +69,7 @@ const validatePayload = (activity) => {
 };
 
 const validateUpdatePayload = (activity) => {
+  if (activity.endTime && activity.endTime < activity.startTime) throw new ValidationError('End time must be on or after start time.');
   validate(activity, {
     date: {
       required: true,
@@ -85,8 +88,8 @@ const validateUpdatePayload = (activity) => {
           return isValidTime(value) ? null : 'endTime must be a valid time (HH:MM).';
       }
     },
-    title: { required: true, type: 'string', maxLength: 100 },
-    location: { required: true, type: 'string', maxLength: 100 },
+    title: { required: true, type: 'string', minLength: 2, maxLength: 100 },
+    location: { required: true, type: 'string', minLength: 2, maxLength: 100 },
     description: { type: 'string', maxLength: 300 },
     sequenceOrder: {
       custom: (value) => (Number.isInteger(value) && value >= 0 ? null : 'sequenceOrder must be a positive integer or zero.')
@@ -94,8 +97,8 @@ const validateUpdatePayload = (activity) => {
   });
 };
 
-const validateTripAndDates = async (tripId, date) => {
-  const trip = await tripModel.findById(tripId);
+const validateTripAndDates = async (tripId, date, userId) => {
+  const trip = await ownedTrip(tripId, userId);
   if (!trip) {
     throw new NotFoundError('Trip not found.');
   }
@@ -113,9 +116,9 @@ const validateTripAndDates = async (tripId, date) => {
   return trip;
 };
 
-const getAllItineraries = async (tripId) => {
+const getAllItineraries = async (tripId, userId) => {
   const id = toPositiveInteger(tripId, 'tripId');
-  const trip = await tripModel.findById(id);
+  const trip = await ownedTrip(id, userId);
   if (!trip) {
     throw new NotFoundError('Trip not found.');
   }
@@ -123,7 +126,7 @@ const getAllItineraries = async (tripId) => {
   return { itineraries, trip };
 };
 
-const getItineraryById = async (id) => {
+const getItineraryById = async (id, userId) => {
   const activityId = toPositiveInteger(id, 'id');
   const itinerary = await itineraryModel.findById(activityId);
 
@@ -131,44 +134,47 @@ const getItineraryById = async (id) => {
     throw new NotFoundError('Itinerary entry not found.');
   }
 
+  await ownedTrip(itinerary.tripId, userId);
   return { itinerary };
 };
 
-const createItinerary = async (payload) => {
+const createItinerary = async (payload, userId) => {
   const activity = normalizePayload(payload);
   validatePayload(activity);
-  await validateTripAndDates(activity.tripId, activity.date);
+  await validateTripAndDates(activity.tripId, activity.date, userId);
 
   const created = await itineraryModel.create(activity);
   return { itinerary: created };
 };
 
-const updateItinerary = async (id, payload) => {
+const updateItinerary = async (id, payload, userId) => {
   const activityId = toPositiveInteger(id, 'id');
   const existing = await itineraryModel.findById(activityId);
 
   if (!existing) {
     throw new NotFoundError('Itinerary entry not found.');
   }
+  await ownedTrip(existing.tripId, userId);
 
   const activity = normalizePayload(payload);
   // Trip ID cannot be changed, keep existing
   activity.tripId = existing.tripId;
   validateUpdatePayload(activity);
-  await validateTripAndDates(activity.tripId, activity.date);
+  await validateTripAndDates(activity.tripId, activity.date, userId);
 
   await itineraryModel.update(activityId, activity);
   const updated = await itineraryModel.findById(activityId);
   return { itinerary: updated };
 };
 
-const deleteItinerary = async (id) => {
+const deleteItinerary = async (id, userId) => {
   const activityId = toPositiveInteger(id, 'id');
   const existing = await itineraryModel.findById(activityId);
 
   if (!existing) {
     throw new NotFoundError('Itinerary entry not found.');
   }
+  await ownedTrip(existing.tripId, userId);
 
   await itineraryModel.remove(activityId);
   return { success: true };

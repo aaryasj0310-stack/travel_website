@@ -13,7 +13,7 @@ const getCategories = async (req, res) => {
 
 const getBudgets = async (req, res) => {
   const budgets = await budgetService.getAllBudgets({
-    userId: req.query.userId
+    userId: req.session.userId
   });
 
   sendSuccess(res, {
@@ -23,7 +23,7 @@ const getBudgets = async (req, res) => {
 };
 
 const getBudget = async (req, res) => {
-  const budget = await budgetService.getBudgetByTripId(req.params.tripId);
+  const budget = await budgetService.getBudgetByTripId(req.params.tripId, req.session.userId);
 
   sendSuccess(res, {
     message: 'Budget retrieved successfully.',
@@ -32,7 +32,7 @@ const getBudget = async (req, res) => {
 };
 
 const createBudget = async (req, res) => {
-  const budget = await budgetService.createBudget(req.params.tripId, req.body);
+  const budget = await budgetService.createBudget(req.params.tripId, req.body, req.session.userId);
 
   sendSuccess(res, {
     statusCode: HTTP_STATUS.CREATED,
@@ -42,7 +42,7 @@ const createBudget = async (req, res) => {
 };
 
 const updateBudget = async (req, res) => {
-  const budget = await budgetService.updateBudget(req.params.tripId, req.body);
+  const budget = await budgetService.updateBudget(req.params.tripId, req.body, req.session.userId);
 
   sendSuccess(res, {
     message: 'Budget updated successfully.',
@@ -51,7 +51,7 @@ const updateBudget = async (req, res) => {
 };
 
 const deleteBudget = async (req, res) => {
-  await budgetService.deleteBudget(req.params.tripId);
+  await budgetService.deleteBudget(req.params.tripId, req.session.userId);
 
   sendSuccess(res, {
     message: 'Budget deleted successfully.',

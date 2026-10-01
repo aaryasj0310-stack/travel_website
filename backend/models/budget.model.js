@@ -15,7 +15,7 @@ const formatDateOnly = (value) => {
 const mapBudget = (row) => ({
   id: row.id,
   tripId: row.trip_id,
-  totalAmount: Number(row.total_amount),
+  totalAmount: String(row.total_amount),
   createdAt: row.created_at,
   updatedAt: row.updated_at
 });
@@ -27,8 +27,8 @@ const mapAllocation = (row) => ({
   categoryName: row.category_name,
   categorySlug: row.category_slug,
   displayOrder: row.display_order,
-  allocatedAmount: Number(row.allocated_amount),
-  spentAmount: Number(row.spent_amount)
+  allocatedAmount: String(row.allocated_amount),
+  spentAmount: String(row.spent_amount)
 });
 
 const findById = async (id) => {
@@ -108,8 +108,8 @@ const findAllByUserId = async (userId) => {
   return rows.map((row) => ({
     id: row.id,
     tripId: row.trip_id,
-    totalAmount: Number(row.total_amount),
-    totalSpent: Number(row.total_spent),
+    totalAmount: String(row.total_amount),
+    totalSpent: String(row.total_spent),
     destination: row.destination,
     startDate: formatDateOnly(row.start_date),
     endDate: formatDateOnly(row.end_date),

@@ -1,6 +1,6 @@
 # Travel Planning & Budget Management System
 
-A production-ready full-stack travel planning and budget management application.
+A trip-centered full-stack travel planning and budget management application for a college project. See `docs/VERIFICATION.md` for verified checks and outstanding environment limitations.
 
 ## Project Overview
 
@@ -17,7 +17,12 @@ Voyage helps users plan trips, manage day-by-day itineraries, track expenses, an
 - **Frontend**: Vanilla HTML5, CSS3 (variables, flexbox/grid), and JavaScript (ES6+).
 - **Backend**: Node.js, Express.js.
 - **Database**: MySQL 8.0+ (using `mysql2` with promises).
-- **Security**: Express-session for auth (infrastructure ready), bcrypt (dependencies ready), cors, morgan.
+- **Security**: bcrypt passwords, authenticated sessions, CSRF tokens, ownership checks, authentication throttling, and basic security headers.
+
+### The product flow
+
+Register → Dashboard → My Trips → Open Trip → Overview / Itinerary / Budget / Expenses.
+`tripId` in the URL keeps the same journey selected across views. The dashboard contains real trip, planning and financial data. Profile editing and password changes are available from Account. Amounts are consistently INR.
 
 ---
 
@@ -32,8 +37,11 @@ Create the MySQL database and run the schema setup script.
 
 ```bash
 mysql -u root -p < database/schema.sql
+mysql -u root -p < database/categories.sql
 ```
-*(Optional)* Load demo data:
+**Fresh databases only:** `schema.sql` rebuilds tables. For an existing installation, run only the non-destructive `categories.sql` if categories are missing. No schema migration is required for this upgrade.
+
+*(Optional, destructive)* Load demo data only into a disposable database:
 ```bash
 mysql -u root -p < database/seed.sql
 ```
@@ -58,9 +66,25 @@ npm run dev
 
 Access the application in your browser at `http://localhost:3000`.
 
+Create a new account at `/register.html`; there is no hard-coded demo-user identity. Existing seed records remain private to their original accounts.
+
+### Tests
+
+```bash
+npm test
+```
+
+Uses Node's built-in test runner and no added dependencies. HTTP tests exercise real middleware/controllers/services with explicit in-memory model substitutes. Frontend unit checks validate source structure and script initialization with a minimal DOM substitute. The separate `node tests/live-mysql.js` command exercises the configured MySQL database with temporary accounts and cleans them up. Real browser and database checks were also performed; see `docs/VERIFICATION.md` for outcomes and repeatable steps.
+
+### Visual assets
+
+The site ships polished CSS landscapes, without image files or runtime image services. `docs/VISUAL_ASSET_BRIEF.md` contains five detailed photography prompts, crop guidance and the exact CSS token integration points.
+
 ---
 
 ## Production Deployment
+
+The current session store and authentication limiter are in process and designed for a single-server local demonstration. Sessions are lost on restart; multiple replicas are unsupported. Add a durable session store and deployment-specific security review before public production use. The preferred supported setup is Express serving the frontend and API from the same origin. Static-only GitHub Pages cannot run the authenticated application. A separately hosted frontend must proxy `/api/v1` to the backend under the frontend origin so cookies and CSRF checks remain effective.
 
 This application can be deployed as a monolith (backend serving frontend) or in a decoupled architecture (frontend hosted separately).
 
@@ -140,6 +164,10 @@ If you prefer to host the frontend on a CDN:
 Base URL: `/api/v1`
 
 - `GET /health` - Server health check
+- `GET /auth/csrf` - Obtain a session CSRF token before registration/login
+- `POST /auth/register`, `POST /auth/login`, `POST /auth/logout`
+- `GET /auth/me`, `PUT /auth/profile`, `PUT /auth/password`
+- `GET /dashboard?tripId=...` - Owned journey overview and deterministic financial/planning metrics
 - `/trips` - Trip management CRUD
 - `/trips/:tripId/budget` - Budget management CRUD
 - `/trips/:tripId/itineraries` - Retrieve itineraries for a trip
@@ -147,6 +175,8 @@ Base URL: `/api/v1`
 - `/budgets/categories` - Budget category list
 - `/expenses` - Expense tracking CRUD
 - `/itineraries` - Itinerary builder CRUD
+
+All resource endpoints require a session. Mutations require `X-CSRF-Token`; login/register/password change return a new token after session regeneration. Client-supplied `userId` is ignored. The `{ success, message, data }` / `{ success, message, errors }` envelope is unchanged. Monetary response fields now use exact decimal strings instead of floating-point numbers; clients should format them with INR and perform arithmetic in paise. Recording an expense over allocation or total budget is allowed and shown as an explicit negative balance.
 
 ## Troubleshooting
 

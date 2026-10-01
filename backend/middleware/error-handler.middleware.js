@@ -14,7 +14,7 @@ const errorHandler = (err, req, res, next) => {
   sendError(res, {
     statusCode,
     message,
-    errors: env.nodeEnv === 'production' && isServerError ? [] : err.errors || []
+    errors: isServerError ? [] : err.errors || []
   });
 };
 

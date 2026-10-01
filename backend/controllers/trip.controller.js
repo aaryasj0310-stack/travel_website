@@ -4,7 +4,7 @@ const { HTTP_STATUS } = require('../utils/constants');
 
 const getTrips = async (req, res) => {
   const trips = await tripService.getAllTrips({
-    userId: req.query.userId
+    userId: req.session.userId
   });
 
   sendSuccess(res, {
@@ -14,7 +14,7 @@ const getTrips = async (req, res) => {
 };
 
 const getTrip = async (req, res) => {
-  const trip = await tripService.getTripById(req.params.id);
+  const trip = await tripService.getTripById(req.params.id, req.session.userId);
 
   sendSuccess(res, {
     message: 'Trip retrieved successfully.',
@@ -23,7 +23,7 @@ const getTrip = async (req, res) => {
 };
 
 const createTrip = async (req, res) => {
-  const trip = await tripService.createTrip(req.body);
+  const trip = await tripService.createTrip(req.body, req.session.userId);
 
   sendSuccess(res, {
     statusCode: HTTP_STATUS.CREATED,
@@ -33,7 +33,7 @@ const createTrip = async (req, res) => {
 };
 
 const updateTrip = async (req, res) => {
-  const trip = await tripService.updateTrip(req.params.id, req.body);
+  const trip = await tripService.updateTrip(req.params.id, req.body, req.session.userId);
 
   sendSuccess(res, {
     message: 'Trip updated successfully.',
@@ -42,7 +42,7 @@ const updateTrip = async (req, res) => {
 };
 
 const deleteTrip = async (req, res) => {
-  await tripService.deleteTrip(req.params.id);
+  await tripService.deleteTrip(req.params.id, req.session.userId);
 
   sendSuccess(res, {
     message: 'Trip deleted successfully.',

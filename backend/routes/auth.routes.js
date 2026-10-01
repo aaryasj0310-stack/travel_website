@@ -1,0 +1,12 @@
+const router = require('express').Router();
+const controller = require('../controllers/auth.controller');
+const asyncHandler = require('../utils/async-handler');
+const { requireAuth, authLimit } = require('../middleware/auth.middleware');
+router.get('/csrf', asyncHandler(controller.token));
+router.post('/register', authLimit, asyncHandler(controller.register));
+router.post('/login', authLimit, asyncHandler(controller.login));
+router.get('/me', requireAuth, asyncHandler(controller.current));
+router.put('/profile', requireAuth, asyncHandler(controller.update));
+router.put('/password', requireAuth, authLimit, asyncHandler(controller.changePassword));
+router.post('/logout', requireAuth, asyncHandler(controller.logout));
+module.exports = router;

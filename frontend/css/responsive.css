@@ -1,65 +1,19 @@
-@media (min-width: 768px) {
-    .site-nav {
-        padding-right: 3rem;
-        padding-left: 3rem;
-    }
-
-    .section {
-        padding-right: 3rem;
-        padding-left: 3rem;
-    }
-
-    .hero__text {
-        font-size: 1.25rem;
-    }
-
-    .hero-title {
-        font-size: 4.5rem;
-    }
+@media(max-width:1024px) { .trip-library { grid-template-columns:repeat(2,minmax(0,1fr)); } .workspace { grid-template-columns:minmax(0,1fr) minmax(260px,.7fr);gap:1.3rem; } .auth-layout { gap:2rem; } }
+@media(max-width:767px) {
+ .container { width:calc(100% - 2rem); } .nav-inner { min-height:72px;flex-wrap:wrap;gap:0; } .nav-inner .nav-toggle { display:inline-flex; }
+ .nav-links { display:none;width:100%;padding:1rem 0;align-items:stretch;flex-direction:column;gap:.4rem; } .nav-links.is-open { display:flex; }
+ .nav-links a { padding:.7rem; } .page-heading { align-items:flex-start;flex-wrap:wrap; } .app-main { padding-top:1.5rem; }
+ .workspace,.two-column,.auth-layout { grid-template-columns:1fr; } .trip-library { grid-template-columns:1fr 1fr;gap:1rem; }
+ .journey-header { padding:1.7rem;min-height:240px;align-items:start;flex-direction:column;gap:1rem; }
+ .trip-tabs { gap:0;justify-content:space-between; } .trip-tabs a { padding:1rem .4rem;font-size:.78rem; }
+ .panel { padding:1.2rem; } .metric-grid { gap:.7rem; } .metric { padding:1rem 0; }
+ .auth-layout { padding-block:2rem; } .auth-story h1 { font-size:3rem; } .auth-story p { display:none; }
+ .expense-form { position:static; } .section { padding-block:3rem; } .footer .container { flex-wrap:wrap; }
 }
-
-@media (min-width: 1024px) {
-    .hero-title {
-        font-size: 6rem;
-    }
-}
-
-@media (max-width: 1023px) {
-    .feature-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .two-column {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 767px) {
-    .nav-links {
-        display: none;
-    }
-
-    .itinerary-grid,
-    .feature-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .itinerary-panel {
-        padding: 2rem;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        gap: 1rem;
-    }
-}
-
-@media (max-width: 639px) {
-    .nav-login {
-        display: none;
-    }
-
-    .hero__actions {
-        flex-direction: column;
-    }
+@media(max-width:480px) {
+ .trip-library { grid-template-columns:1fr; } .form-grid { grid-template-columns:1fr; } .metric-grid { grid-template-columns:1fr;gap:0; }
+ .metric { display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap; } .metric small { width:100%; }
+ .metric strong { font-size:1.8rem; } .category-top { flex-wrap:wrap; } .timeline-activity { grid-template-columns:62px minmax(0,1fr);gap:.4rem; }
+ .timeline-content { padding-left:1rem; } .expense-row { grid-template-columns:1fr; } .expense-row .actions { grid-column:auto; }
+ .budget-hero { padding:1.4rem; } .section-header { align-items:start;flex-direction:column; }
 }

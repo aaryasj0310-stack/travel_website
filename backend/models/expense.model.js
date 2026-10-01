@@ -19,7 +19,7 @@ const mapExpense = (row) => ({
   categoryId: row.category_id,
   categoryName: row.category_name || null,
   categorySlug: row.category_slug || null,
-  amount: Number(row.amount),
+  amount: String(row.amount),
   expenseDate: formatDateOnly(row.expense_date),
   description: row.description,
   createdAt: row.created_at,
@@ -109,7 +109,7 @@ const sumByBudgetId = async (budgetId, excludeExpenseId = null) => {
     params
   );
 
-  return Number(rows[0].total_spent);
+  return String(rows[0].total_spent);
 };
 
 const categoryExistsForBudget = async (budgetId, categoryId) => {
