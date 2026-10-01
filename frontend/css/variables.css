@@ -10,5 +10,5 @@
   --space-1: .5rem; --space-2: 1rem; --space-3: 1.5rem; --space-4: 2rem; --space-6: 3rem;
   --radius: .65rem; --radius-large: 1.2rem; --shadow: 0 16px 40px rgba(32,55,42,.08);
   --duration: 180ms; --content-width: 76rem; --form-width: 30rem;
-  --media-landing: none; --media-planning: none; --media-budget: none; --media-closing: none; --media-trip: none;
+  --media-landing: url('../images/cinematic/landing-hero.png'); --media-planning: url('../images/cinematic/planning-story.png'); --media-budget: url('../images/cinematic/budget-story.png'); --media-closing: url('../images/cinematic/closing-cta.png'); --media-trip: url('../images/cinematic/journey-header.png');
 }

@@ -7,3 +7,8 @@
 .timeline-time { font-size:.85rem;font-weight:600;color:var(--forest); } .timeline-content { position:relative;padding-left:1.5rem;border-left:1px solid var(--line); }
 .timeline-content::before { content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--accent);left:-4px;top:.5rem; }
 .timeline-content p { color:var(--muted);font-size:.85rem;margin:.3rem 0 .7rem; } .timeline-content .actions { margin-top:.8rem; }
+.itinerary-accent { position:relative;overflow:hidden;height:84px;border-radius:var(--radius);margin:1.5rem 0 2rem;padding:1rem 1.4rem;display:flex;align-items:flex-end;color:var(--on-dark);background-size:cover;background-position:center;box-shadow:var(--shadow); }
+.itinerary-accent::before { content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(24,56,47,.88) 0%,rgba(24,56,47,.4) 65%,transparent 100%); }
+.itinerary-accent.accent-historic { background-image:url('../images/cinematic/itinerary-historic.png'); }
+.itinerary-accent.accent-nature { background-image:url('../images/cinematic/itinerary-nature.png'); }
+.itinerary-accent span { position:relative;z-index:1;font:italic .95rem var(--font-serif);letter-spacing:.05em;color:var(--on-dark); }

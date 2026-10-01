@@ -11,14 +11,22 @@
     if (budgetResult.status === 'rejected') notify('Your trips loaded, but budget health is temporarily unavailable.', true);
     const today = localToday();
     trips = trips.map(t => ({...t,status:today<t.startDate?'upcoming':today>t.endDate?'completed':'ongoing'}));
+    const coverClass = (dest, st) => {
+      const norm = (dest || '').toLowerCase();
+      if (/\bgoa\b/.test(norm)) return 'cover-goa';
+      if (/\bjaipur\b/.test(norm)) return 'cover-jaipur';
+      if (/\bmunnar\b/.test(norm)) return 'cover-munnar';
+      if (st === 'completed') return 'cover-completed';
+      return '';
+    };
     $('#trip-list').innerHTML = trips.length ? ['ongoing','upcoming','completed'].map(status => {
       const items = trips.filter(t=>t.status===status); if (!items.length) return '';
       return '<h2 class="library-group-title">'+({ongoing:'On the road',upcoming:'On the horizon',completed:'In your memories'}[status])+'</h2><div class="trip-library">'+items.map(t=>{
         const b=budgets.find(b=>String(b.tripId)===String(t.id));
         const remaining=b ? Voyage.paise(b.totalAmount)-Voyage.paise(b.totalSpent):null;
-        return '<article class="destination-card"><div class="destination-cover"><span class="tag">'+status+'</span></div><div class="destination-body"><h3>'+escape(t.destination)+'</h3><p>'+date(t.startDate)+' — '+date(t.endDate)+'<br>'+t.numTravelers+' travelers · '+(Math.round((Date.parse(t.endDate)-Date.parse(t.startDate))/86400000)+1)+' days</p><p>'+ (status==='upcoming'?Math.round((Date.parse(t.startDate)-Date.parse(today))/86400000)+' days until departure':status==='ongoing'?'Enjoy the journey.':'A journey worth remembering.')+'</p><p>'+(b?(remaining<0?'Over budget by ':'Budget remaining ')+money(Math.abs(remaining)/100):budgetResult.status==='fulfilled'?'No budget set yet':'Budget unavailable')+'</p><a class="btn btn-primary" href="'+link('dashboard',t.id)+'">Open trip ↗</a><div class="actions"><button class="btn btn-small" data-edit="'+t.id+'">Edit trip</button><button class="btn btn-small btn-danger" data-delete="'+t.id+'">Delete trip</button></div></div></article>';
+        return '<article class="destination-card"><div class="destination-cover '+coverClass(t.destination, status)+'"><span class="tag">'+status+'</span></div><div class="destination-body"><h3>'+escape(t.destination)+'</h3><p>'+date(t.startDate)+' — '+date(t.endDate)+'<br>'+t.numTravelers+' travelers · '+(Math.round((Date.parse(t.endDate)-Date.parse(t.startDate))/86400000)+1)+' days</p><p>'+ (status==='upcoming'?Math.round((Date.parse(t.startDate)-Date.parse(today))/86400000)+' days until departure':status==='ongoing'?'Enjoy the journey.':'A journey worth remembering.')+'</p><p>'+(b?(remaining<0?'Over budget by ':'Budget remaining ')+money(Math.abs(remaining)/100):budgetResult.status==='fulfilled'?'No budget set yet':'Budget unavailable')+'</p><a class="btn btn-primary" href="'+link('dashboard',t.id)+'">Open trip ↗</a><div class="actions"><button class="btn btn-small" data-edit="'+t.id+'">Edit trip</button><button class="btn btn-small btn-danger" data-delete="'+t.id+'">Delete trip</button></div></div></article>';
       }).join('')+'</div>';
-    }).join('') : empty('Your first journey starts here.','A new place. A fresh perspective. Start with a destination.','trips.html?create=1','Create a trip');
+    }).join('') : empty('Your first journey starts here.','A new place. A fresh perspective. Start with a destination.','trips.html?create=1','Create a trip','images/cinematic/empty-trips.png');
     $('#trip-list').setAttribute('aria-busy','false');
   };
   $('#trip-list').addEventListener('click',async event=>{

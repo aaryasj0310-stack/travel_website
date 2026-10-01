@@ -4,10 +4,10 @@
 .hero-footnote { display:flex;gap:1rem;align-items:center;font-size:.7rem;color:var(--muted);margin-top:2.5rem; }
 .tiny-route { font-size:1.4rem;color:var(--accent);white-space:nowrap; }
 .hero-art { position:relative;isolation:isolate;height:620px;border-radius:12rem 12rem var(--radius) var(--radius);background:var(--media-landing),linear-gradient(180deg,var(--sky),var(--gold));background-size:cover;background-position:center;overflow:hidden; }
-.landscape-sun { width:100px;height:100px;background:var(--paper);opacity:.55;border-radius:50%;position:absolute;right:22%;top:12%;z-index:-1; }
-.landscape-ridge { position:absolute;inset:20% -30% -20%;z-index:-1;border-radius:45%;transform:rotate(-30deg); }
-.ridge-back { background:var(--ridge);top:35%;left:-70%; } .ridge-front { background:var(--forest);top:51%;right:-70%;transform:rotate(25deg); }
-.landscape-path { position:absolute;inset:65% 20% -35% 42%;border-left:12px solid var(--gold);border-radius:50%;transform:rotate(25deg);opacity:.6;z-index:-1; }
+.landscape-sun { display:none; }
+.landscape-ridge { display:none; }
+.ridge-back { display:none; } .ridge-front { display:none; }
+.landscape-path { display:none; }
 .hero-art::after { content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,var(--forest-deep));z-index:-1; }
 .art-caption { position:absolute;top:49%;left:10%;right:10%;color:var(--on-dark);text-align:center; }
 .art-caption span { font-size:.6rem;letter-spacing:.2em; } .art-caption p { font:italic 2.5rem var(--font-serif);margin:.7rem 0; }

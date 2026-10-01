@@ -2,6 +2,10 @@
 .destination-card { overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-large);transition:transform var(--duration); }
 .destination-card:hover { transform:translateY(-3px); } .destination-cover { padding:1.5rem;min-height:170px;display:flex;align-items:end;position:relative;background:radial-gradient(ellipse at 110% 135%,var(--forest) 0 55%,transparent 55.5%),linear-gradient(135deg,var(--sky),var(--ridge));color:var(--on-dark); }
 .destination-card:nth-child(2n) .destination-cover { background:radial-gradient(ellipse at 20% 140%,var(--accent) 0 60%,transparent 60.5%),linear-gradient(135deg,var(--gold),var(--accent-soft)); }
+.destination-cover.cover-goa { background:linear-gradient(180deg,rgba(24,56,47,.25),rgba(24,56,47,.8)),url('../images/cinematic/trip-goa.png') center/cover no-repeat,var(--forest); }
+.destination-cover.cover-jaipur { background:linear-gradient(180deg,rgba(24,56,47,.25),rgba(24,56,47,.8)),url('../images/cinematic/trip-jaipur.png') center/cover no-repeat,var(--forest); }
+.destination-cover.cover-munnar { background:linear-gradient(180deg,rgba(24,56,47,.25),rgba(24,56,47,.8)),url('../images/cinematic/trip-munnar.png') center/cover no-repeat,var(--forest); }
+.destination-cover.cover-completed { background:linear-gradient(180deg,rgba(24,56,47,.35),rgba(24,56,47,.85)),url('../images/cinematic/trip-completed.png') center/cover no-repeat,var(--forest); }
 .destination-cover .tag { background:var(--forest-deep);border-color:var(--forest-deep); }
 .destination-body { padding:1.5rem; } .destination-body h3 { font:400 1.8rem var(--font-serif);margin-bottom:.5rem; }
 .destination-body p { color:var(--muted);font-size:.8rem;margin-bottom:1rem; } .destination-body .actions { margin-top:1.2rem; }

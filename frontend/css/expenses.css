@@ -2,3 +2,4 @@
 .expense-row h3 { font-size:.95rem; } .expense-row p { color:var(--muted);font-size:.8rem; } .expense-row strong { font-size:1.25rem;font-weight:500; }
 .expense-row .actions { grid-column:1/-1; } .expense-total { color:var(--muted);margin:.75rem 0; }
 .expense-form .amount-input { font-size:2rem;letter-spacing:-.04em; } .expense-form { position:sticky;top:1.5rem; }
+#expense-summary .budget-hero { position:relative;isolation:isolate;background:linear-gradient(135deg,rgba(24,56,47,.9),rgba(35,77,64,.93)),url('../images/cinematic/expense-texture.png') center/cover no-repeat,var(--forest);color:var(--on-dark); }

@@ -7,7 +7,7 @@
     const rows=expenses.filter(e=>!selected||String(e.categoryId)===selected);
     const total=rows.reduce((sum,e)=>sum+paise(e.amount),0);
     $('#expense-count').textContent=rows.length+' records · '+money(total/100)+(selected?' in this category':' total recorded');
-    $('#expense-list').innerHTML=rows.length?rows.map(e=>'<article class="expense-row"><div><h3>'+escape(e.description||e.categoryName)+'</h3><p>'+escape(e.categoryName)+' · '+date(e.expenseDate)+'</p></div><strong>'+money(e.amount)+'</strong><div class="actions"><button class="btn btn-small" data-edit="'+e.id+'">Edit expense</button><button class="btn btn-small btn-danger" data-delete="'+e.id+'">Delete expense</button></div></article>').join(''):empty(selected?'No expenses in this category.':'No spending recorded yet.','When you spend, capture it here. Your remaining budget updates with every entry.');
+    $('#expense-list').innerHTML=rows.length?rows.map(e=>'<article class="expense-row"><div><h3>'+escape(e.description||e.categoryName)+'</h3><p>'+escape(e.categoryName)+' · '+date(e.expenseDate)+'</p></div><strong>'+money(e.amount)+'</strong><div class="actions"><button class="btn btn-small" data-edit="'+e.id+'">Edit expense</button><button class="btn btn-small btn-danger" data-delete="'+e.id+'">Delete expense</button></div></article>').join(''):empty(selected?'No expenses in this category.':'No spending recorded yet.','When you spend, capture it here. Your remaining budget updates with every entry.',null,null,!selected&&expenses.length===0?'images/cinematic/empty-expenses.png':null);
   };
   const load=async()=>{
     const [result,overview]=await Promise.all([api('/expenses?tripId='+data.trip.id),api('/dashboard?tripId='+data.trip.id)]);
