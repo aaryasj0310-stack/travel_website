@@ -1,5 +1,5 @@
 (async () => {
-  const { $, ready, api, notify, busy, escape, date, money, link, empty, editor, localToday } = Voyage;
+  const { $, ready, api, notify, busy, escape, date, money, link, empty, editor, localToday, coverClass } = Voyage;
   let trips = [], budgets = [], editing = null;
   const openEditor = editor();
   const open = trip => { editing = trip?.id || null; $('#trip-form').reset(); if (trip) for (const key of ['destination','startDate','endDate','numTravelers','description']) $('#'+key).value = trip[key] || ''; openEditor(trip ? 'Edit your journey' : 'A new chapter'); };
@@ -11,14 +11,6 @@
     if (budgetResult.status === 'rejected') notify('Your trips loaded, but budget health is temporarily unavailable.', true);
     const today = localToday();
     trips = trips.map(t => ({...t,status:today<t.startDate?'upcoming':today>t.endDate?'completed':'ongoing'}));
-    const coverClass = (dest, st) => {
-      const norm = (dest || '').toLowerCase();
-      if (/\bgoa\b/.test(norm)) return 'cover-goa';
-      if (/\bjaipur\b/.test(norm)) return 'cover-jaipur';
-      if (/\bmunnar\b/.test(norm)) return 'cover-munnar';
-      if (st === 'completed') return 'cover-completed';
-      return '';
-    };
     $('#trip-list').innerHTML = trips.length ? ['ongoing','upcoming','completed'].map(status => {
       const items = trips.filter(t=>t.status===status); if (!items.length) return '';
       return '<h2 class="library-group-title">'+({ongoing:'On the road',upcoming:'On the horizon',completed:'In your memories'}[status])+'</h2><div class="trip-library">'+items.map(t=>{
